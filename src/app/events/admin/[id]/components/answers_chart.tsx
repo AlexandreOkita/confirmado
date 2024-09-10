@@ -83,8 +83,8 @@ export function AnswersChart(chartData: { answer_date: string, total_answers: nu
                             tickMargin={8}
                             minTickGap={32}
                             tickFormatter={(value) => {
-                                const date = new Date(value)
-                                return date.toLocaleDateString("en-US", {
+                                const date = new Date(`${value}T00:00:00`)
+                                return date.toLocaleDateString("pt-BR", {
                                     month: "short",
                                     day: "numeric",
                                 })
@@ -96,7 +96,7 @@ export function AnswersChart(chartData: { answer_date: string, total_answers: nu
                                     className="w-[150px] bg-slate-950"
                                     nameKey="views"
                                     labelFormatter={(value) => {
-                                        return new Date(value).toLocaleDateString("pt-BR", {
+                                        return new Date(`${value}T00:00:00`).toLocaleDateString("pt-BR", {
                                             month: "short",
                                             day: "numeric",
                                             year: "numeric",
