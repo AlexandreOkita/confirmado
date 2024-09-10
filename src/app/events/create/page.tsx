@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { BackgroundLines } from "@/components/ui/background-lines";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShootingStars } from "@/components/ui/shooting-stars";
@@ -13,7 +12,10 @@ import { createEvent } from "./controller";
 export default function CreateEventPage() {
     const [eventName, setEventName] = useState("");
     const [loading, setLoading] = useState(false);
-    const [eventData, setEventData] = useState<any>(null);
+    const [eventData, setEventData] = useState<{
+        adminLink: string;
+        sharebleLink: string;
+    } | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

@@ -19,28 +19,6 @@ import {
 
 export const description = "An interactive bar chart"
 
-const chartData = [
-    { date: "2024-06-12", answers: 492 },
-    { date: "2024-06-13", answers: 81 },
-    { date: "2024-06-14", answers: 426 },
-    { date: "2024-06-15", answers: 307 },
-    { date: "2024-06-16", answers: 371 },
-    { date: "2024-06-17", answers: 475 },
-    { date: "2024-06-18", answers: 107 },
-    { date: "2024-06-19", answers: 341 },
-    { date: "2024-06-20", answers: 408 },
-    { date: "2024-06-21", answers: 169 },
-    { date: "2024-06-22", answers: 317 },
-    { date: "2024-06-23", answers: 480 },
-    { date: "2024-06-24", answers: 132 },
-    { date: "2024-06-25", answers: 141 },
-    { date: "2024-06-26", answers: 434 },
-    { date: "2024-06-27", answers: 448 },
-    { date: "2024-06-28", answers: 149 },
-    { date: "2024-06-29", answers: 103 },
-    { date: "2024-06-30", answers: 446 },
-]
-
 const chartConfig = {
     views: {
         label: "Confirmações",
@@ -54,13 +32,6 @@ const chartConfig = {
 export function AnswersChart(chartData: { answer_date: string, total_answers: number }[]) {
     const [activeChart, setActiveChart] =
         React.useState<keyof typeof chartConfig>("total_answers")
-
-    const total = React.useMemo(
-        () => ({
-            total_answers: chartData.reduce((acc, curr) => acc + curr.total_answers, 0),
-        }),
-        []
-    )
 
     return (
         <Card>
@@ -84,7 +55,7 @@ export function AnswersChart(chartData: { answer_date: string, total_answers: nu
                                     {chartConfig[chart].label}
                                 </span>
                                 <span className="text-lg font-bold leading-none sm:text-3xl">
-                                    {chartData.reduce((acc, curr) => acc + curr.total_answers, 0)}
+                                    {chartData.reduce((acc, curr) => acc + Number(curr.total_answers), 0)}
                                 </span>
                             </button>
                         )

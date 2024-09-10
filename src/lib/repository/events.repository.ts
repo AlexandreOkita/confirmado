@@ -5,7 +5,7 @@ import { createKysely } from '@vercel/postgres-kysely';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function insertEvent(name: string): Promise<{ adminLink: string, sharebleLink: string }> {
-    var appendVersion = '';
+    let appendVersion = '';
     const db = createKysely<ConfirmadoDatabase>();
     const uuid = uuidv4();
 

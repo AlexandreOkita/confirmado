@@ -1,6 +1,5 @@
 "use client"
 
-import { getEventBySharebleLink } from "@/lib/repository/events.repository";
 import { useEffect } from "react";
 import { AnswersChart } from "./components/answers_chart"
 import { AnswersTable } from "./components/answers_table";
@@ -25,12 +24,9 @@ export default function Admin({ params }: { params: { id: string } }) {
 
 
     document.documentElement.classList.add('dark');
-    console.log("chart", chartData);
-    console.log("answers", answers);
-
     return (
         <div>
-            {AnswersChart(chartData)}
+            {AnswersChart(AdminController.populateAnswersChartWithMissingDates(chartData))}
             {AnswersTable(answers)}
         </div>
     )
