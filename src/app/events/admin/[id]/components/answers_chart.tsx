@@ -33,6 +33,8 @@ export function AnswersChart(chartData: { answer_date: string, total_answers: nu
     const [activeChart, setActiveChart] =
         React.useState<keyof typeof chartConfig>("total_answers")
 
+    console.log(chartData)
+
     return (
         <Card>
             <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
