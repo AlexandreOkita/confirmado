@@ -45,19 +45,19 @@ const chartConfig = {
     views: {
         label: "Confirmações",
     },
-    answers: {
+    total_answers: {
         label: "Confirmações",
         color: "hsl(var(--chart-1))",
     },
 } satisfies ChartConfig
 
-export function AnswersChart() {
+export function AnswersChart(chartData: { answer_date: string, total_answers: number }[]) {
     const [activeChart, setActiveChart] =
-        React.useState<keyof typeof chartConfig>("answers")
+        React.useState<keyof typeof chartConfig>("total_answers")
 
     const total = React.useMemo(
         () => ({
-            answers: chartData.reduce((acc, curr) => acc + curr.answers, 0),
+            total_answers: chartData.reduce((acc, curr) => acc + curr.total_answers, 0),
         }),
         []
     )
@@ -72,20 +72,19 @@ export function AnswersChart() {
                     </CardDescription>
                 </div>
                 <div className="flex">
-                    {["answers"].map((key) => {
+                    {["total_answers"].map((key) => {
                         const chart = key as keyof typeof chartConfig
                         return (
                             <button
                                 key={chart}
                                 data-active={activeChart === chart}
                                 className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
-                                onClick={() => setActiveChart(chart)}
                             >
                                 <span className="text-xs text-muted-foreground">
                                     {chartConfig[chart].label}
                                 </span>
                                 <span className="text-lg font-bold leading-none sm:text-3xl">
-                                    {total[key as keyof typeof total].toLocaleString()}
+                                    {chartData.reduce((acc, curr) => acc + curr.total_answers, 0)}
                                 </span>
                             </button>
                         )
@@ -107,7 +106,7 @@ export function AnswersChart() {
                     >
                         <CartesianGrid vertical={false} />
                         <XAxis
-                            dataKey="date"
+                            dataKey="answer_date"
                             tickLine={false}
                             axisLine={false}
                             tickMargin={8}

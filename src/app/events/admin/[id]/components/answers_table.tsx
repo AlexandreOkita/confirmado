@@ -3,64 +3,20 @@ import {
     TableBody,
     TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Answer } from "@/lib/data/confirmado.database"
 
-const answers = [
-    {
-        id: "001",
-        name: "Alexandre Okita",
-        email: "xande.okita@gmail.com",
-        date: "2024-09-08",
-    },
-    {
-        id: "002",
-        name: "John Doe",
-        email: "johndoe@example.com",
-        date: "2024-09-09",
-    },
-    {
-        id: "003",
-        name: "Jane Smith",
-        email: "janesmith@example.com",
-        date: "2024-09-10",
-    },
-    {
-        id: "004",
-        name: "Michael Johnson",
-        email: "michaeljohnson@example.com",
-        date: "2024-09-11",
-    },
-    {
-        id: "005",
-        name: "Emily Davis",
-        email: "emilydavis@example.com",
-        date: "2024-09-12",
-    },
-    {
-        id: "006",
-        name: "David Wilson",
-        email: "davidwilson@example.com",
-        date: "2024-09-13",
-    },
-    {
-        id: "007",
-        name: "Sarah Thompson",
-        email: "sarahthompson@example.com",
-        date: "2024-09-14",
-    },
-    {
-        id: "008",
-        name: "Christopher Martinez",
-        email: "christophermartinez@example.com",
-        date: "2024-09-15",
-    }
-]
+function formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
 
-export function AnswersTable() {
+export function AnswersTable(answers: Answer[]) {
     return (
         <Table className="border px-4">
             <TableCaption>Lista das últimas confirmações.</TableCaption>
@@ -73,12 +29,12 @@ export function AnswersTable() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {answers.map((answer) => (
+                {answers.map((answer, index) => (
                     <TableRow key={answer.id}>
-                        <TableCell className="font-medium">{answer.id}</TableCell>
+                        <TableCell className="font-medium">{index + 1}</TableCell>
                         <TableCell className="font-medium">{answer.name}</TableCell>
                         <TableCell>{answer.email}</TableCell>
-                        <TableCell>{answer.date}</TableCell>
+                        <TableCell>{formatDate(answer.created_at)}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>

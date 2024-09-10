@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { BackgroundLines } from "@/components/ui/background-lines";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,51 +8,88 @@ import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
+import { createEvent } from "./controller";
 
 export default function CreateEventPage() {
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [eventName, setEventName] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [eventData, setEventData] = useState<any>(null);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Form submitted");
+        setLoading(true);
+        try {
+            const data = await createEvent(eventName);
+            setEventData(data);
+        } catch (error) {
+            console.error("Failed to create event:", error);
+        } finally {
+            setLoading(false);
+        }
     };
+
     return (
         <div className="flex h-screen items-center justify-center w-full flex-col px-4 font-mono bg-slate-950 text-white">
             <ShootingStars />
             <StarsBackground />
-            <div className="relative z-20 justify-center flex-col max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+            {!eventData && (<div className="relative z-20 justify-center flex-col max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
                 <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
                     Bem vindo!
                 </h2>
                 <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-                    Para criar seu evento é simples, basta preencher o nome e uma senha para acessar os dados posteriormente.
+                    Para criar seu evento é simples, basta preencher o nome e armazenar os links gerados posteriormente.
                 </p>
 
                 <form className="my-8 text-black" onSubmit={handleSubmit}>
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="eventname">Nome do Evento</Label>
-                        <Input id="eventname" placeholder="Corrida Naruto" type="text" />
-                    </LabelInputContainer>
-                    <LabelInputContainer className="mb-4">
-                        <Label htmlFor="password">Senha</Label>
-                        <Input id="password" placeholder="••••••••" type="password" />
-                    </LabelInputContainer>
-                    <LabelInputContainer className="mb-8">
-                        <Label htmlFor="confirmpassword">Confirme sua senha</Label>
                         <Input
-                            id="confirmpassword"
-                            placeholder="••••••••"
-                            type="password"
+                            id="eventname"
+                            placeholder="Corrida Naruto"
+                            type="text"
+                            value={eventName}
+                            onChange={(e) => setEventName(e.target.value)}
                         />
                     </LabelInputContainer>
-
                     <Button
                         className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
                         type="submit"
+                        disabled={loading}
                     >
-                        Criar &rarr;
+                        {loading ? "Carregando..." : "Criar →"}
                     </Button>
                 </form>
-            </div>
+            </div>)}
 
+            {eventData && (
+                <div className="relative z-20 justify-center flex-col max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+                    <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
+                        Evento criado com sucesso
+                    </h2>
+                    <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
+                        Não se esqueça de salvar com carinho os seguintes links. Eles não podem ser recuperados!
+                    </p>
+                    <form className="my-8 text-gray-600">
+                        <LabelInputContainer className="mb-4">
+                            <Label htmlFor="adminlink">Link para as métricas (privado):</Label>
+                            <Input
+                                id="adminlink"
+                                value={window.location.origin + '/events/admin' + eventData.adminLink}
+                                readOnly
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer className="mb-4">
+                            <Label htmlFor="sharelink">Link para responder (público):</Label>
+                            <Input
+                                id="sharelink"
+                                value={window.location.origin + '/events' + eventData.sharebleLink}
+                                readOnly
+                            />
+                        </LabelInputContainer>
+                    </form>
+                </div>
+            )}
         </div>
     );
 }
