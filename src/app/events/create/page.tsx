@@ -8,6 +8,8 @@ import { StarsBackground } from "@/components/ui/stars-background";
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
 import { createEvent } from "./controller";
+import { ClipboardIcon } from "@radix-ui/react-icons";
+
 
 export default function CreateEventPage() {
     const [eventName, setEventName] = useState("");
@@ -74,20 +76,34 @@ export default function CreateEventPage() {
                     <form className="my-8 text-gray-600">
                         <LabelInputContainer className="mb-4">
                             <Label htmlFor="adminlink">Link para as métricas (privado):</Label>
-                            <Input
-                                id="adminlink"
-                                value={window.location.origin + '/events/admin' + eventData.adminLink}
-                                readOnly
-                            />
+                            <div className="flex items-center">
+                                <div className="flex-grow">
+                                    <Input
+                                        id="adminlink"
+                                        value={window.location.origin + '/events/admin' + eventData.adminLink}
+                                        readOnly
+                                    />
+                                </div>
+                                <div className="w-1/6 flex justify-center">
+                                    <CopyButton textToCopy={window.location.origin + '/events/admin' + eventData.adminLink} />
+                                </div>
+                            </div>
                         </LabelInputContainer>
 
                         <LabelInputContainer className="mb-4">
                             <Label htmlFor="sharelink">Link para responder (público):</Label>
-                            <Input
-                                id="sharelink"
-                                value={window.location.origin + '/events' + eventData.sharebleLink}
-                                readOnly
-                            />
+                            <div className="flex items-center">
+                                <div className="flex-grow">
+                                    <Input
+                                        id="sharelink"
+                                        value={window.location.origin + '/events' + eventData.sharebleLink}
+                                        readOnly
+                                    />
+                                </div>
+                                <div className="w-1/6 flex justify-center">
+                                    <CopyButton textToCopy={window.location.origin + '/events' + eventData.sharebleLink} />
+                                </div>
+                            </div>
                         </LabelInputContainer>
                     </form>
                 </div>
@@ -107,5 +123,21 @@ const LabelInputContainer = ({
         <div className={cn("flex flex-col space-y-2 w-full", className)}>
             {children}
         </div>
+    );
+};
+
+const CopyButton = ({ textToCopy }: { textToCopy: string }) => {
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+        } catch (error) {
+            console.error("Failed to copy text:", error);
+        }
+    };
+
+    return (
+        <button type="button" onClick={handleCopy} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
+            <ClipboardIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+        </button>
     );
 };

@@ -22,7 +22,7 @@ export default function Home() {
   const router = useRouter()
 
   return (
-    <BackgroundLines className="flex items-center justify-center w-full flex-col px-4 font-mono bg-slate-950 text-white">
+    <BackgroundLines className="flex items-center justify-center w-full h-screen flex-col px-4 font-mono bg-slate-950 text-white">
       <StarsBackground />
       <div className="flex flex-col items-center justify-center h-[40rem] relative z-20">
         <p className="text-neutral-300 dark:text-neutral-200 text-xs sm:text-base">
